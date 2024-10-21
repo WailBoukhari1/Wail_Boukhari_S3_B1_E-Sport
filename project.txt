@@ -1,0 +1,116 @@
+Project context
+Une organisation d'e-sport souhaite développer une application de gestion pour organiser et suivre des tournois de jeux vidéo. Cette application servira à gérer les joueurs, les équipes et les tournois
+
+​
+
+Fonctionnalités principales :
+
+Gestion des joueurs (inscription, modification, suppression, affichage d'un ou plusieurs)
+Gestion des équipes (création, modification, ajout/retrait de joueurs, affichage d'une ou plusieurs)
+Gestion des tournois (création, modification, ajout/retrait des équipes, affichage d'un ou plusieurs)
+
+​
+
+Structure des classes principales :
+
+Joueur (pseudo, âge, équipe)
+Equipe (nom, joueurs, tournois, classement)
+Tournoi (titre, jeu, date de début, date de fin, nombre de spectateurs, équipes, dureeEstimee, Temps de pause entre les matchs, Temps de cérémonie, statut(PLANIFIE, EN_COURS, TERMINE, ANNULE))
+Jeu (nom, difficulté, Durée moyenne d'un match)
+
+​
+
+libre à vous de mettre les interfaces que vous voulez mais les plus importantes sont :
+TournoiDao : Méthode : calculerdureeEstimeeTournoi(Long tournoiId)
+TournoiMetier : Méthode : obtenirdureeEstimeeTournoi(Long tournoiId)
+
+​
+
+Classes d'implémentation :
+TournoiDaoImpl (implémente TournoiDao)
+TournoiDaoExtension (implémente TournoiDao)
+TournoiMetierImpl (implémente TournoiMetier)
+
+​
+
+Règles de calcul de la durée totale estimée du tournoi :
+Calcul de base (TournoiDaoImpl) :
+Durée estimée = (Nombre d'équipes × Durée moyenne d'un match) + (Temps de pause entre les matchs)
+Calcul avancé (TournoiDaoExtension) :
+Durée estimée = (Nombre d'équipes × Durée moyenne d'un match × difficulté du jeu) + (Temps de pause entre les matchs) + (Temps pour les cérémonies d'ouverture et de clôture)
+
+​
+
+Structure du projet :
+
+Fichiers de configuration :
+
+applicationContext.xml (pour la configuration Spring)
+pom.xml (pour la configuration Maven)
+persistence.xml (pour la configuration JPA et H2)
+autres fichiers de configuration s'il le faut
+Couche de modèle (entités JPA)
+Couche de repository (utilisant JPA/Hibernate)
+Couche de service (logique métier)
+Couche utilitaire
+Classe présentation avec menu console (Méthode main() pour démarrer l'application + Utilisation de ApplicationContext pour charger la configuration Spring sans annotations)
+Tests unitaires
+
+​
+
+Libre à vous de mettre la forme du menu de console que vous voulez
+
+​
+
+Nouvelles exigences techniques à utiliser :
+
+Utiliser H2 comme SGBD
+Utiliser Spring Core pour l'Inversion of Control (IoC) et la Dependency Injection (DI) via la configuration XML (applicationContext.xml) et pas avec les annotations
+Utiliser Spring containers pour la gestion des beans définis dans applicationContext.xml
+Créer une extension (TournoiDaoExtension) pour démontrer le principe Open/Closed
+Implémenter des tests unitaires et au moins un test d'intégration couvrant l'interaction entre les couches DAO et service
+Utiliser JaCoCo pour mesurer la couverture de code
+
+​
+
+Anciennes exigences techniques à ré-utiliser :
+
+Développer avec Java 8
+Utiliser Maven pour la gestion des dépendances
+Créer des tests unitaires avec JUnit et Mockito
+Implémenter les design patterns Repository et Singleton
+Ajouter un système de logging (LOGGER)
+Utiliser JPA et Hibernate pour l'accès aux données
+Mettre en place les validations nécessaires de Hibernate en Utilisant des annotations Validator (comme @NotNull, @Size, etc.)
+Mettre les autres validations de logique
+Développer la classe principale avec un menu console pour interagir avec l'application
+Générer le fichier JAR
+
+Utiliser les fonctionnalités Java 8 :  Stream API, Lambda expressions, Java Time API, Collection API et Hashmaps, Optional
+
+​
+
+Outils de travail :
+
+Gérer le projet avec Git en utilisant des branches
+Utiliser un IDE de votre choix
+Utiliser JIRA pour la gestion du projet en utilisant la méthode Scrum et en le liant correctement avec Git
+
+​
+
+Interdictions et restrictions :
+
+Ne pas utiliser System.out.println() pour l'affichage
+Ne pas utiliser Log4j. Utilisez plutôt le système de logging LOGGER avec SL4J ou logging de java native
+Créer un simple projet Java, PAS un projet Spring Boot
+
+Il est interdit d'utiliser les annotations Spring suivantes :
+@Service
+@Repository
+@Component
+@SpringBootApplication
+@Autowired
+@ComponentScan
+Toute la configuration doit être faite via XML, comme spécifié dans les exigences
+
+​

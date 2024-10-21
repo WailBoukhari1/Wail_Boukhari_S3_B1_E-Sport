@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:component-scan base-package="com.esports"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="esports-pu"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- Define your beans here -->
+    <bean id="playerRepository" class="com.esports.repository.impl.PlayerRepositoryImpl"/>
+    <bean id="teamRepository" class="com.esports.repository.impl.TeamRepositoryImpl"/>
+    <bean id="tournamentRepository" class="com.esports.repository.impl.TournamentRepositoryImpl"/>
+    <bean id="tournamentRepositoryExtension" class="com.esports.repository.impl.TournamentRepositoryExtension"/>
+
+    <bean id="playerService" class="com.esports.service.impl.PlayerServiceImpl">
+        <property name="playerRepository" ref="playerRepository"/>
+    </bean>
+
+    <bean id="teamService" class="com.esports.service.impl.TeamServiceImpl">
+        <property name="teamRepository" ref="teamRepository"/>
+        <property name="playerRepository" ref="playerRepository"/>
+    </bean>
+
+    <bean id="tournamentService" class="com.esports.service.impl.TournamentServiceImpl">
+        <property name="tournamentRepository" ref="tournamentRepository"/>
+        <property name="teamRepository" ref="teamRepository"/>
+    </bean>
+
+</beans>
