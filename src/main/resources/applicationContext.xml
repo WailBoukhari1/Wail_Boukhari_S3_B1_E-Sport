@@ -14,9 +14,17 @@
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="esports-pu"/>
+        <property name="dataSource" ref="dataSource"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
+    </bean>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:esportsdb;DB_CLOSE_DELAY=-1"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -43,6 +51,18 @@
     <bean id="tournamentService" class="com.esports.service.impl.TournamentServiceImpl">
         <property name="tournamentRepository" ref="tournamentRepository"/>
         <property name="teamRepository" ref="teamRepository"/>
+    </bean>
+
+    <bean id="playerController" class="com.esports.controller.PlayerController">
+        <property name="playerService" ref="playerService"/>
+    </bean>
+
+    <bean id="teamController" class="com.esports.controller.TeamController">
+        <property name="teamService" ref="teamService"/>
+    </bean>
+
+    <bean id="tournamentController" class="com.esports.controller.TournamentController">
+        <property name="tournamentService" ref="tournamentService"/>
     </bean>
 
 </beans>

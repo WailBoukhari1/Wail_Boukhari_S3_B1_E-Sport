@@ -2,7 +2,6 @@ package com.esports.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.esports.model.Player;
@@ -11,14 +10,10 @@ import com.esports.repository.PlayerRepository;
 import com.esports.repository.TeamRepository;
 import com.esports.service.TeamService;
 
-
 @Transactional
 public class TeamServiceImpl implements TeamService {
 
-    @Autowired
     private TeamRepository teamRepository;
-
-    @Autowired
     private PlayerRepository playerRepository;
 
     @Override
@@ -68,5 +63,13 @@ public class TeamServiceImpl implements TeamService {
             teamRepository.update(team);
             playerRepository.update(player);
         }
+    }
+
+    public void setTeamRepository(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
+    }
+
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
     }
 }

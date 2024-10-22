@@ -2,7 +2,6 @@ package com.esports.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.esports.model.Player;
@@ -12,7 +11,6 @@ import com.esports.service.PlayerService;
 @Transactional
 public class PlayerServiceImpl implements PlayerService {
 
-    @Autowired
     private PlayerRepository playerRepository;
 
     @Override
@@ -38,5 +36,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void delete(Long id) {
         playerRepository.delete(id);
+    }
+
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
     }
 }

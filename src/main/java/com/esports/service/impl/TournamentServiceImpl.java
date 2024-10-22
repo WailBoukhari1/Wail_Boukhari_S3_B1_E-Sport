@@ -2,7 +2,6 @@ package com.esports.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.esports.model.Team;
@@ -11,14 +10,10 @@ import com.esports.repository.TeamRepository;
 import com.esports.repository.TournamentRepository;
 import com.esports.service.TournamentService;
 
-
 @Transactional
 public class TournamentServiceImpl implements TournamentService {
 
-    @Autowired
     private TournamentRepository tournamentRepository;
-
-    @Autowired
     private TeamRepository teamRepository;
 
     @Override
@@ -73,5 +68,13 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public int calculateEstimatedDuration(Long tournamentId) {
         return tournamentRepository.calculateEstimatedDuration(tournamentId);
+    }
+
+    public void setTournamentRepository(TournamentRepository tournamentRepository) {
+        this.tournamentRepository = tournamentRepository;
+    }
+
+    public void setTeamRepository(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
     }
 }

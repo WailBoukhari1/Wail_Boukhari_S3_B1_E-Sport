@@ -1,14 +1,16 @@
 package com.esports.repository.impl;
 
-import com.esports.model.Player;
-import com.esports.repository.PlayerRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.esports.model.Player;
+import com.esports.repository.PlayerRepository;
 
 public class PlayerRepositoryImpl implements PlayerRepository {
 
@@ -50,4 +52,5 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             entityManager.remove(player);
         }
     }
+    
 }
