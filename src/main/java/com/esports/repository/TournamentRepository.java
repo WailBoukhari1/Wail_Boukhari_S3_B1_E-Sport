@@ -10,5 +10,6 @@ public interface TournamentRepository {
     void save(Tournament tournament);
     void update(Tournament tournament);
     void delete(Long id);
+    Tournament findByTitle(String title);
     int calculateEstimatedDuration(Long tournamentId);
 }

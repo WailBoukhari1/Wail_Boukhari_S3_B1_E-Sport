@@ -3,7 +3,6 @@ package com.esports.repository.impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
@@ -16,8 +15,30 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PlayerRepositoryImpl.class);
 
-    @PersistenceContext
+    private static PlayerRepositoryImpl instance;
     private EntityManager entityManager;
+
+    private PlayerRepositoryImpl() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static synchronized PlayerRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new PlayerRepositoryImpl();
+        }
+        return instance;
+    }
+    @Override
+    public Player findByUsername(String username) {
+        LOGGER.info("Finding player with username: {}", username);
+        TypedQuery<Player> query = entityManager.createQuery("SELECT p FROM Player p WHERE p.username = :username", Player.class);
+        query.setParameter("username", username);
+        List<Player> results = query.getResultList();
+        return results.isEmpty() ? null : results.get(0);
+    }
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Player findById(Long id) {
@@ -52,5 +73,4 @@ public class PlayerRepositoryImpl implements PlayerRepository {
             entityManager.remove(player);
         }
     }
-    
 }

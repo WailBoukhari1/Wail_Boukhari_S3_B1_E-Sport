@@ -17,28 +17,23 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    public Player getPlayer(Long id) {
-        LOGGER.info("Getting player with id: {}", id);
-        return playerService.findById(id);
-    }
-
     public List<Player> getAllPlayers() {
-        LOGGER.info("Getting all players");
         return playerService.findAll();
     }
 
+    public Player getPlayerByUsername(String username) {
+        return playerService.getPlayerByUsername(username);
+    }
+
     public void createPlayer(Player player) {
-        LOGGER.info("Creating new player: {}", player.getUsername());
         playerService.save(player);
     }
 
     public void updatePlayer(Player player) {
-        LOGGER.info("Updating player: {}", player.getUsername());
         playerService.update(player);
     }
 
-    public void deletePlayer(Long id) {
-        LOGGER.info("Deleting player with id: {}", id);
-        playerService.delete(id);
+    public void deletePlayerByUsername(String username) {
+        playerService.deletePlayerByUsername(username);
     }
 }

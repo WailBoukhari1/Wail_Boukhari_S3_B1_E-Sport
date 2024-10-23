@@ -10,5 +10,8 @@ public interface PlayerService {
     void save(Player player);
     void update(Player player);
     void delete(Long id);
+    Player getPlayerByUsername(String username);
+    void deletePlayerByUsername(String username);
+
 }
 

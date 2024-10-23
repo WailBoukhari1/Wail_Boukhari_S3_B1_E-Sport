@@ -10,4 +10,5 @@ public interface TeamRepository {
     void save(Team team);
     void update(Team team);
     void delete(Long id);
+    Team findByName(String name);
 }

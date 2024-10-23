@@ -13,12 +13,17 @@ public class PlayerServiceImpl implements PlayerService {
 
     private PlayerRepository playerRepository;
 
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
+
     @Override
     public Player findById(Long id) {
         return playerRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Player> findAll() {
         return playerRepository.findAll();
     }
@@ -38,7 +43,16 @@ public class PlayerServiceImpl implements PlayerService {
         playerRepository.delete(id);
     }
 
-    public void setPlayerRepository(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
+    @Override
+    public Player getPlayerByUsername(String username) {
+        return playerRepository.findByUsername(username);
+    }
+
+    @Override
+    public void deletePlayerByUsername(String username) {
+        Player player = getPlayerByUsername(username);
+        if (player != null) {
+            delete(player.getId());
+        }
     }
 }

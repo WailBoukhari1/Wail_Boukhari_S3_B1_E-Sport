@@ -17,14 +17,14 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-    public Team getTeam(Long id) {
-        LOGGER.info("Getting team with id: {}", id);
-        return teamService.findById(id);
-    }
-
     public List<Team> getAllTeams() {
         LOGGER.info("Getting all teams");
         return teamService.findAll();
+    }
+
+    public Team getTeamByName(String name) {
+        LOGGER.info("Getting team by name: {}", name);
+        return teamService.getTeamByName(name);
     }
 
     public void createTeam(Team team) {
@@ -37,18 +37,18 @@ public class TeamController {
         teamService.update(team);
     }
 
-    public void deleteTeam(Long id) {
-        LOGGER.info("Deleting team with id: {}", id);
-        teamService.delete(id);
+    public void deleteTeamByName(String name) {
+        LOGGER.info("Deleting team by name: {}", name);
+        teamService.deleteTeamByName(name);
     }
 
-    public void addPlayerToTeam(Long teamId, Long playerId) {
-        LOGGER.info("Adding player {} to team {}", playerId, teamId);
-        teamService.addPlayerToTeam(teamId, playerId);
+    public void addPlayerToTeam(String teamName, String playerUsername) {
+        LOGGER.info("Adding player {} to team {}", playerUsername, teamName);
+        teamService.addPlayerToTeam(teamName, playerUsername);
     }
 
-    public void removePlayerFromTeam(Long teamId, Long playerId) {
-        LOGGER.info("Removing player {} from team {}", playerId, teamId);
-        teamService.removePlayerFromTeam(teamId, playerId);
+    public void removePlayerFromTeam(String teamName, String playerUsername) {
+        LOGGER.info("Removing player {} from team {}", playerUsername, teamName);
+        teamService.removePlayerFromTeam(teamName, playerUsername);
     }
 }

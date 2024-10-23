@@ -16,12 +16,21 @@ public class TeamServiceImpl implements TeamService {
     private TeamRepository teamRepository;
     private PlayerRepository playerRepository;
 
+    public void setTeamRepository(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
+    }
+
+    public void setPlayerRepository(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
+
     @Override
     public Team findById(Long id) {
         return teamRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Team> findAll() {
         return teamRepository.findAll();
     }
@@ -42,34 +51,56 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void addPlayerToTeam(Long teamId, Long playerId) {
-        Team team = teamRepository.findById(teamId);
-        Player player = playerRepository.findById(playerId);
-        if (team != null && player != null) {
-            team.getPlayers().add(player);
-            player.setTeam(team);
+    public void addPlayerToTeam(String teamName, String playerUsername) {
+        Team team = teamRepository.findByName(teamName);
+        if (team == null) {
+            throw new IllegalArgumentException("Team not found with name: " + teamName);
+        }
+
+        Player player = playerRepository.findByUsername(playerUsername);
+        if (player == null) {
+            throw new IllegalArgumentException("Player not found with username: " + playerUsername);
+        }
+
+        team.getPlayers().add(player);
+        player.setTeam(team);
+        teamRepository.update(team);
+        playerRepository.update(player);
+    }
+
+    @Override
+    public void removePlayerFromTeam(String teamName, String playerUsername) {
+        Team team = teamRepository.findByName(teamName);
+        if (team == null) {
+            throw new IllegalArgumentException("Team not found with name: " + teamName);
+        }
+
+        Player player = playerRepository.findByUsername(playerUsername);
+        if (player == null) {
+            throw new IllegalArgumentException("Player not found with username: " + playerUsername);
+        }
+
+        if (team.getPlayers().remove(player)) {
+            player.setTeam(null);
             teamRepository.update(team);
             playerRepository.update(player);
+        } else {
+            throw new IllegalArgumentException("Player is not a member of this team");
         }
     }
 
     @Override
-    public void removePlayerFromTeam(Long teamId, Long playerId) {
-        Team team = teamRepository.findById(teamId);
-        Player player = playerRepository.findById(playerId);
-        if (team != null && player != null && team.getPlayers().contains(player)) {
-            team.getPlayers().remove(player);
-            player.setTeam(null);
-            teamRepository.update(team);
-            playerRepository.update(player);
+    public Team getTeamByName(String name) {
+        return teamRepository.findByName(name);
+    }
+
+    @Override
+    public void deleteTeamByName(String name) {
+        Team team = teamRepository.findByName(name);
+        if (team != null) {
+            teamRepository.delete(team.getId());
+        } else {
+            throw new IllegalArgumentException("Team not found with name: " + name);
         }
-    }
-
-    public void setTeamRepository(TeamRepository teamRepository) {
-        this.teamRepository = teamRepository;
-    }
-
-    public void setPlayerRepository(PlayerRepository playerRepository) {
-        this.playerRepository = playerRepository;
     }
 }

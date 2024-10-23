@@ -10,4 +10,6 @@ public interface PlayerRepository {
     void save(Player player);
     void update(Player player);
     void delete(Long id);
+    Player findByUsername(String username);
+
 }

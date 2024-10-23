@@ -11,6 +11,8 @@
                            http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:component-scan base-package="com.esports"/>
+    
+    <context:property-placeholder location="classpath:application.properties"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="esports-pu"/>
@@ -18,27 +20,57 @@
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+            </props>
+        </property>
     </bean>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url" value="jdbc:h2:mem:esportsdb;DB_CLOSE_DELAY=-1"/>
-        <property name="username" value="sa"/>
-        <property name="password" value=""/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
-
+    <bean id="h2WebServer" class="org.h2.tools.Server" factory-method="createWebServer" init-method="start" destroy-method="stop">
+        <constructor-arg value="-web,-webAllowOthers,-webPort,0"/>
+    </bean>
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <!-- Define your beans here -->
-    <bean id="playerRepository" class="com.esports.repository.impl.PlayerRepositoryImpl"/>
-    <bean id="teamRepository" class="com.esports.repository.impl.TeamRepositoryImpl"/>
-    <bean id="tournamentRepository" class="com.esports.repository.impl.TournamentRepositoryImpl"/>
-    <bean id="tournamentRepositoryExtension" class="com.esports.repository.impl.TournamentRepositoryExtension"/>
+    <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
 
+    <!-- Define your beans here -->
+    <!-- Repositories -->
+    <bean id="playerRepository" class="com.esports.repository.impl.PlayerRepositoryImpl" factory-method="getInstance">
+        <property name="entityManager" ref="entityManager" />
+    </bean>
+    
+    <bean id="teamRepository" class="com.esports.repository.impl.TeamRepositoryImpl" factory-method="getInstance">
+        <property name="entityManager" ref="entityManager" />
+    </bean>
+
+    <bean id="tournamentRepositoryImpl" class="com.esports.repository.impl.TournamentRepositoryImpl">
+        <property name="entityManager" ref="entityManager" />
+    </bean>
+
+    <bean id="tournamentRepository" class="com.esports.repository.impl.TournamentRepositoryExtension">
+        <constructor-arg ref="tournamentRepositoryImpl"/>
+    </bean>
+
+    <bean id="gameRepository" class="com.esports.repository.impl.GameRepositoryImpl" factory-method="getInstance">
+        <property name="entityManager" ref="entityManager" />
+    </bean>
+    <!-- Services -->
     <bean id="playerService" class="com.esports.service.impl.PlayerServiceImpl">
         <property name="playerRepository" ref="playerRepository"/>
     </bean>
@@ -51,8 +83,13 @@
     <bean id="tournamentService" class="com.esports.service.impl.TournamentServiceImpl">
         <property name="tournamentRepository" ref="tournamentRepository"/>
         <property name="teamRepository" ref="teamRepository"/>
+        <property name="gameRepository" ref="gameRepository"/>
     </bean>
-
+    <bean id="gameService" class="com.esports.service.impl.GameServiceImpl">
+        <property name="gameRepository" ref="gameRepository"/>
+        <property name="teamRepository" ref="teamRepository"/>
+    </bean>
+    <!-- Controllers -->
     <bean id="playerController" class="com.esports.controller.PlayerController">
         <property name="playerService" ref="playerService"/>
     </bean>
@@ -63,6 +100,10 @@
 
     <bean id="tournamentController" class="com.esports.controller.TournamentController">
         <property name="tournamentService" ref="tournamentService"/>
+    </bean>
+
+    <bean id="gameController" class="com.esports.controller.GameController">
+        <property name="gameService" ref="gameService"/>
     </bean>
 
 </beans>

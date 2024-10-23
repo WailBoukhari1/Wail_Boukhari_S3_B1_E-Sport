@@ -1,21 +1,44 @@
 package com.esports.repository.impl;
 
-import com.esports.model.Team;
-import com.esports.repository.TeamRepository;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.List;
+import com.esports.model.Team;
+import com.esports.repository.TeamRepository;
 
 public class TeamRepositoryImpl implements TeamRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TeamRepositoryImpl.class);
 
-    @PersistenceContext
+    private static TeamRepositoryImpl instance;
     private EntityManager entityManager;
+
+    private TeamRepositoryImpl() {
+        // Private constructor to prevent instantiation
+    }
+    @Override
+    public Team findByName(String name) {
+        LOGGER.info("Finding team with name: {}", name);
+        TypedQuery<Team> query = entityManager.createQuery("SELECT t FROM Team t WHERE t.name = :name", Team.class);
+        query.setParameter("name", name);
+        List<Team> results = query.getResultList();
+        return results.isEmpty() ? null : results.get(0);
+    }
+    public static synchronized TeamRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new TeamRepositoryImpl();
+        }
+        return instance;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Team findById(Long id) {
@@ -26,7 +49,7 @@ public class TeamRepositoryImpl implements TeamRepository {
     @Override
     public List<Team> findAll() {
         LOGGER.info("Finding all teams");
-        TypedQuery<Team> query = entityManager.createQuery("SELECT t FROM Team t", Team.class);
+        TypedQuery<Team> query = entityManager.createQuery("SELECT DISTINCT t FROM Team t LEFT JOIN FETCH t.players LEFT JOIN FETCH t.games", Team.class);
         return query.getResultList();
     }
 
