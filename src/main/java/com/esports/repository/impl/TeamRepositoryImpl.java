@@ -49,7 +49,7 @@ public class TeamRepositoryImpl implements TeamRepository {
     @Override
     public List<Team> findAll() {
         LOGGER.info("Finding all teams");
-        TypedQuery<Team> query = entityManager.createQuery("SELECT DISTINCT t FROM Team t LEFT JOIN FETCH t.players LEFT JOIN FETCH t.games", Team.class);
+        TypedQuery<Team> query = entityManager.createQuery("SELECT DISTINCT t FROM Team t LEFT JOIN FETCH t.players", Team.class);
         return query.getResultList();
     }
 

@@ -39,9 +39,6 @@ public class Team {
     private int ranking;
 
     @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER)
-    private Set<Game> games = new HashSet<>();
-
-    @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER)
     private Set<Tournament> tournaments = new HashSet<>();
 
     // Getters and setters
@@ -74,14 +71,6 @@ public class Team {
 
     public void setRanking(int ranking) {
         this.ranking = ranking;
-    }
-
-    public Set<Game> getGames() {
-        return games;
-    }
-
-    public void setGames(Set<Game> games) {
-        this.games = games;
     }
 
     public Set<Tournament> getTournaments() {

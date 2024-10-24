@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f543600-f395-4dbd-8f9e-cb8c792862d2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/controller/ApplicationContext.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/controller/TournamentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/controller/TournamentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/service/TournamentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/service/TournamentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/GameServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/GameServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/TournamentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/TournamentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/applicationContext.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
-    </list>
+    <list default="true" id="5f543600-f395-4dbd-8f9e-cb8c792862d2" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,7 +89,7 @@
       <workItem from="1729609910966" duration="16706000" />
       <workItem from="1729758018163" duration="4575000" />
       <workItem from="1729766575967" duration="107000" />
-      <workItem from="1729773993414" duration="610000" />
+      <workItem from="1729773993414" duration="979000" />
     </task>
     <servers />
   </component>

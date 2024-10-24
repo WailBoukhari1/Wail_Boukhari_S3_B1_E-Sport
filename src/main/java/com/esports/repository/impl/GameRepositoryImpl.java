@@ -43,10 +43,9 @@ public class GameRepositoryImpl implements GameRepository {
     @Override
     public List<Game> findAll() {
         LOGGER.info("Finding all games");
-        TypedQuery<Game> query = entityManager.createQuery("SELECT DISTINCT g FROM Game g LEFT JOIN FETCH g.teams", Game.class);
+        TypedQuery<Game> query = entityManager.createQuery("SELECT DISTINCT g FROM Game g", Game.class);
         return query.getResultList();
     }
-
     @Override
     public void save(Game game) {
         LOGGER.info("Saving game: {}", game.getName());
