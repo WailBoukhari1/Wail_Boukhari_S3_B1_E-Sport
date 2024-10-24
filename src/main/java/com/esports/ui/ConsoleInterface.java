@@ -22,6 +22,33 @@ import com.esports.model.TournamentStatus;
 
 public class ConsoleInterface {
 
+    // ANSI color codes
+    private static final String RESET = "\u001B[0m";
+    private static final String RED = "\u001B[31m";
+    private static final String GREEN = "\u001B[32m";
+    private static final String YELLOW = "\u001B[33m";
+    private static final String BLUE = "\u001B[34m";
+    private static final String PURPLE = "\u001B[35m";
+    private static final String CYAN = "\u001B[36m";
+
+    // Emojis
+    private static final String PLAYER_EMOJI = "👤";
+    private static final String TEAM_EMOJI = "👥";
+    private static final String GAME_EMOJI = "🎮";
+    private static final String TOURNAMENT_EMOJI = "🏆";
+    private static final String SUCCESS_EMOJI = "✅";
+    private static final String ERROR_EMOJI = "❌";
+    private static final String WARNING_EMOJI = "⚠️";
+    private static final String MENU_EMOJI = "📋";
+    private static final String EXIT_EMOJI = "👋";
+    private static final String EDIT_EMOJI = "✏️";
+    private static final String DELETE_EMOJI = "🗑️";
+    private static final String VIEW_EMOJI = "👀";
+    private static final String ADD_EMOJI = "➕";
+    private static final String REMOVE_EMOJI = "➖";
+    private static final String TIME_EMOJI = "⏱️";
+    private static final String STATUS_EMOJI = "🔄";
+
     private Scanner scanner;
     private PlayerController playerController;
     private TeamController teamController;
@@ -41,7 +68,7 @@ public class ConsoleInterface {
         boolean exit = false;
         while (!exit) {
             printMainMenu();
-            int choice = getIntInput("Enter your choice: ");
+            int choice = getIntInput(CYAN + "Enter your choice: " + RESET, 1, 5);
             switch (choice) {
                 case 1:
                     handlePlayerMenu();
@@ -59,31 +86,31 @@ public class ConsoleInterface {
                     exit = true;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println(RED + ERROR_EMOJI + " Invalid choice. Please try again." + RESET);
             }
         }
-        System.out.println("Thank you for using the E-Sports Tournament Management System!");
+        System.out.println(GREEN + EXIT_EMOJI + " Thank you for using the E-Sports Tournament Management System!" + RESET);
     }
 
     private void printMainMenu() {
-        System.out.println("\n--- E-Sports Tournament Management System ---");
-        System.out.println("1. Player Management");
-        System.out.println("2. Team Management");
-        System.out.println("3. Game Management");
-        System.out.println("4. Tournament Management");
-        System.out.println("5. Exit");
+        System.out.println("\n" + PURPLE + MENU_EMOJI + " --- E-Sports Tournament Management System --- " + MENU_EMOJI + RESET);
+        System.out.println(BLUE + "1. " + PLAYER_EMOJI + " Player Management" + RESET);
+        System.out.println(BLUE + "2. " + TEAM_EMOJI + " Team Management" + RESET);
+        System.out.println(BLUE + "3. " + GAME_EMOJI + " Game Management" + RESET);
+        System.out.println(BLUE + "4. " + TOURNAMENT_EMOJI + " Tournament Management" + RESET);
+        System.out.println(BLUE + "5. " + EXIT_EMOJI + " Exit" + RESET);
     }
 
     private void handlePlayerMenu() {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Player Management ---");
-            System.out.println("1. Create Player");
-            System.out.println("2. View All Players");
-            System.out.println("3. Edit Player");
-            System.out.println("4. Delete Player");
-            System.out.println("5. Back to Main Menu");
-            int choice = getIntInput("Enter your choice: ");
+            System.out.println("\n" + PURPLE + PLAYER_EMOJI + " --- Player Management --- " + PLAYER_EMOJI + RESET);
+            System.out.println(BLUE + "1. " + ADD_EMOJI + " Create Player" + RESET);
+            System.out.println(BLUE + "2. " + VIEW_EMOJI + " View All Players" + RESET);
+            System.out.println(BLUE + "3. " + EDIT_EMOJI + " Edit Player" + RESET);
+            System.out.println(BLUE + "4. " + DELETE_EMOJI + " Delete Player" + RESET);
+            System.out.println(BLUE + "5. " + EXIT_EMOJI + " Back to Main Menu" + RESET);
+            int choice = getIntInput(CYAN + "Enter your choice: " + RESET, 1, 5);
             switch (choice) {
                 case 1:
                     createPlayer();
@@ -101,88 +128,91 @@ public class ConsoleInterface {
                     back = true;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println(RED + ERROR_EMOJI + " Invalid choice. Please try again." + RESET);
             }
         }
     }
 
     private void createPlayer() {
-        System.out.println("\nCreating a new player:");
-        String username = getStringInput("Enter username: ", 3, 50);
-        int age = getIntInput("Enter age: ", 13, 100);
-    
+        System.out.println("\n" + YELLOW + ADD_EMOJI + " Creating a new player:" + RESET);
+        String username = getStringInput(CYAN + "Enter username: " + RESET, 3, 50);
+        int age = getIntInput(CYAN + "Enter age: " + RESET, 13, 100);
+
         Player player = new Player();
         player.setUsername(username);
         player.setAge(age);
-    
+
         try {
             playerController.createPlayer(player);
-            System.out.println("Player created successfully.");
+            System.out.println(GREEN + SUCCESS_EMOJI + " Player created successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error creating player: " + e.getMessage());
-        }
-    }
-
-    private void editPlayer() {
-        String username = getStringInput("Enter the username of the player to edit: ");
-        Player player = playerController.getPlayerByUsername(username);
-        if (player == null) {
-            System.out.println("Player not found.");
-            return;
-        }
-    
-        String newUsername = getStringInput("Enter new username (3-50 characters, press enter to keep current): ");
-        if (!newUsername.isEmpty()) {
-            player.setUsername(newUsername);
-        }
-    
-        int newAge = getIntInput("Enter new age (13-100, press enter to keep current): ", 13, 100);
-        if (newAge != -1) {
-            player.setAge(newAge);
-        }
-    
-        try {
-            playerController.updatePlayer(player);
-            System.out.println("Player updated successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error updating player: " + e.getMessage());
-        }
-    }
-
-    private void deletePlayer() {
-        String username = getStringInput("Enter the username of the player to delete: ");
-        try {
-            playerController.deletePlayerByUsername(username);
-            System.out.println("Player deleted successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error deleting player: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error creating player: " + e.getMessage() + RESET);
         }
     }
 
     private void viewAllPlayers() {
         List<Player> players = playerController.getAllPlayers();
         if (players.isEmpty()) {
-            System.out.println("No players found.");
+            System.out.println(YELLOW + WARNING_EMOJI + " No players found." + RESET);
         } else {
-            System.out.println("\nAll Players:");
+            System.out.println("\n" + BLUE + VIEW_EMOJI + " All Players:" + RESET);
             for (Player player : players) {
-                System.out.println("Username: " + player.getUsername() + ", Age: " + player.getAge() + ", Team: " + (player.getTeam() != null ? player.getTeam().getName() : "N/A"));
+                System.out.println(CYAN + "Username: " + player.getUsername()
+                        + ", Age: " + player.getAge()
+                        + ", Team: " + (player.getTeam() != null ? player.getTeam().getName() : "N/A") + RESET);
             }
+        }
+    }
+
+    private void editPlayer() {
+        String username = getStringInput(CYAN + "Enter the username of the player to edit: " + RESET);
+        Player player = playerController.getPlayerByUsername(username);
+        if (player == null) {
+            System.out.println(RED + ERROR_EMOJI + " Player not found." + RESET);
+            return;
+        }
+
+        System.out.println(YELLOW + EDIT_EMOJI + " Editing player: " + username + RESET);
+        String newUsername = getStringInput(CYAN + "Enter new username (3-50 characters, press enter to keep current): " + RESET);
+        if (!newUsername.isEmpty()) {
+            player.setUsername(newUsername);
+        }
+
+        int newAge = getIntInput(CYAN + "Enter new age (13-100, press enter to keep current): " + RESET, 13, 100);
+        if (newAge != -1) {
+            player.setAge(newAge);
+        }
+
+        try {
+            playerController.updatePlayer(player);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Player updated successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error updating player: " + e.getMessage() + RESET);
+        }
+    }
+
+    private void deletePlayer() {
+        String username = getStringInput(CYAN + "Enter the username of the player to delete: " + RESET);
+        try {
+            playerController.deletePlayerByUsername(username);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Player deleted successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error deleting player: " + e.getMessage() + RESET);
         }
     }
 
     private void handleTeamMenu() {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Team Management ---");
-            System.out.println("1. Create Team");
-            System.out.println("2. View All Teams");
-            System.out.println("3. Edit Team");
-            System.out.println("4. Delete Team");
-            System.out.println("5. Add Player to Team");
-            System.out.println("6. Remove Player from Team");
-            System.out.println("7. Back to Main Menu");
-            int choice = getIntInput("Enter your choice: ");
+            System.out.println("\n" + PURPLE + TEAM_EMOJI + " --- Team Management --- " + TEAM_EMOJI + RESET);
+            System.out.println(BLUE + "1. " + ADD_EMOJI + " Create Team" + RESET);
+            System.out.println(BLUE + "2. " + VIEW_EMOJI + " View All Teams" + RESET);
+            System.out.println(BLUE + "3. " + EDIT_EMOJI + " Edit Team" + RESET);
+            System.out.println(BLUE + "4. " + DELETE_EMOJI + " Delete Team" + RESET);
+            System.out.println(BLUE + "5. " + ADD_EMOJI + " Add Player to Team" + RESET);
+            System.out.println(BLUE + "6. " + REMOVE_EMOJI + " Remove Player from Team" + RESET);
+            System.out.println(BLUE + "7. " + EXIT_EMOJI + " Back to Main Menu" + RESET);
+            int choice = getIntInput(CYAN + "Enter your choice: " + RESET, 1, 7);
             switch (choice) {
                 case 1:
                     createTeam();
@@ -206,15 +236,15 @@ public class ConsoleInterface {
                     back = true;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println(RED + ERROR_EMOJI + " Invalid choice. Please try again." + RESET);
             }
         }
     }
 
     private void createTeam() {
-        System.out.println("\nCreating a new team:");
-        String name = getStringInput("Enter team name: ", 3, 50);
-        int ranking = getIntInput("Enter team ranking: ", 1, 1000);
+        System.out.println("\n" + YELLOW + ADD_EMOJI + " Creating a new team:" + RESET);
+        String name = getStringInput(CYAN + "Enter team name: " + RESET, 3, 50);
+        int ranking = getIntInput(CYAN + "Enter team ranking: " + RESET, 1, 1000);
 
         Team team = new Team();
         team.setName(name);
@@ -222,82 +252,97 @@ public class ConsoleInterface {
 
         try {
             teamController.createTeam(team);
-            System.out.println("Team created successfully.");
+            System.out.println(GREEN + SUCCESS_EMOJI + " Team created successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error creating team: " + e.getMessage());
-        }
-    }
-
-    private void editTeam() {
-        String name = getStringInput("Enter the name of the team to edit: ");
-        Team team = teamController.getTeamByName(name);
-        if (team == null) {
-            System.out.println("Team not found.");
-            return;
-        }
-
-        String newName = getStringInput("Enter new team name (3-50 characters, press enter to keep current): ");
-        if (!newName.isEmpty()) {
-            team.setName(newName);
-        }
-
-        int newRanking = getIntInput("Enter new team ranking (1-1000, press enter to keep current): ");
-        if (newRanking != -1) {
-            team.setRanking(newRanking);
-        }
-
-        try {
-            teamController.updateTeam(team);
-            System.out.println("Team updated successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error updating team: " + e.getMessage());
-        }
-    }
-
-    private void deleteTeam() {
-        String name = getStringInput("Enter the name of the team to delete: ");
-        try {
-            teamController.deleteTeamByName(name);
-            System.out.println("Team deleted successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error deleting team: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error creating team: " + e.getMessage() + RESET);
         }
     }
 
     private void viewAllTeams() {
         List<Team> teams = teamController.getAllTeams();
         if (teams.isEmpty()) {
-            System.out.println("No teams found.");
+            System.out.println(YELLOW + WARNING_EMOJI + " No teams found." + RESET);
         } else {
-            System.out.println("\nAll Teams:");
+            System.out.println("\n" + BLUE + VIEW_EMOJI + " All Teams:" + RESET);
             for (Team team : teams) {
-                System.out.println("Name: " + team.getName() + ", Ranking: " + team.getRanking() + ", Players: " + team.getPlayers().size());
+                System.out.println(CYAN + "Name: " + team.getName()
+                        + ", Ranking: " + team.getRanking()
+                        + ", Players: " + team.getPlayers().size() + RESET);
             }
         }
     }
 
+    private void editTeam() {
+        String name = getStringInput(CYAN + "Enter the name of the team to edit: " + RESET);
+        Team team = teamController.getTeamByName(name);
+        if (team == null) {
+            System.out.println(RED + ERROR_EMOJI + " Team not found." + RESET);
+            return;
+        }
+
+        System.out.println(YELLOW + EDIT_EMOJI + " Editing team: " + name + RESET);
+        String newName = getStringInput(CYAN + "Enter new team name (3-50 characters, press enter to keep current): " + RESET);
+        if (!newName.isEmpty()) {
+            team.setName(newName);
+        }
+
+        int newRanking = getIntInput(CYAN + "Enter new team ranking (1-1000, press enter to keep current): " + RESET, 1, 1000);
+        if (newRanking != -1) {
+            team.setRanking(newRanking);
+        }
+
+        try {
+            teamController.updateTeam(team);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Team updated successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error updating team: " + e.getMessage() + RESET);
+        }
+    }
+
+    private void deleteTeam() {
+        String name = getStringInput(CYAN + "Enter the name of the team to delete: " + RESET);
+        try {
+            teamController.deleteTeamByName(name);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Team deleted successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error deleting team: " + e.getMessage() + RESET);
+        }
+    }
+
     private void addPlayerToTeam() {
-        String teamName = getStringInput("Enter team name: ");
-        String playerUsername = getStringInput("Enter player username: ");
+        String teamName = getStringInput(CYAN + "Enter team name: " + RESET);
+        String playerUsername = getStringInput(CYAN + "Enter player username: " + RESET);
 
         try {
             teamController.addPlayerToTeam(teamName, playerUsername);
-            System.out.println("Player added to the team successfully.");
+            System.out.println(GREEN + SUCCESS_EMOJI + " Player added to the team successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error adding player to team: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error adding player to team: " + e.getMessage() + RESET);
+        }
+    }
+
+    private void removePlayerFromTeam() {
+        String teamName = getStringInput(CYAN + "Enter team name: " + RESET);
+        String playerUsername = getStringInput(CYAN + "Enter player username: " + RESET);
+
+        try {
+            teamController.removePlayerFromTeam(teamName, playerUsername);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Player removed from the team successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error removing player from team: " + e.getMessage() + RESET);
         }
     }
 
     private void handleGameMenu() {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Game Management ---");
-            System.out.println("1. Create Game");
-            System.out.println("2. View All Games");
-            System.out.println("3. Edit Game");
-            System.out.println("4. Delete Game");
-            System.out.println("5. Back to Main Menu");
-            int choice = getIntInput("Enter your choice: ");
+            System.out.println("\n" + PURPLE + GAME_EMOJI + " --- Game Management --- " + GAME_EMOJI + RESET);
+            System.out.println(BLUE + "1. " + ADD_EMOJI + " Create Game" + RESET);
+            System.out.println(BLUE + "2. " + VIEW_EMOJI + " View All Games" + RESET);
+            System.out.println(BLUE + "3. " + EDIT_EMOJI + " Edit Game" + RESET);
+            System.out.println(BLUE + "4. " + DELETE_EMOJI + " Delete Game" + RESET);
+            System.out.println(BLUE + "5. " + EXIT_EMOJI + " Back to Main Menu" + RESET);
+            int choice = getIntInput(CYAN + "Enter your choice: " + RESET, 1, 5);
             switch (choice) {
                 case 1:
                     createGame();
@@ -315,16 +360,16 @@ public class ConsoleInterface {
                     back = true;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println(RED + ERROR_EMOJI + " Invalid choice. Please try again." + RESET);
             }
         }
     }
 
     private void createGame() {
-        System.out.println("\nCreating a new game:");
-        String name = getStringInput("Enter game name: ", 3, 50);
-        int difficulty = getIntInput("Enter game difficulty: ", 1, 10);
-        int averageMatchDuration = getIntInput("Enter average match duration in minutes: ", 1, 180);
+        System.out.println("\n" + YELLOW + ADD_EMOJI + " Creating a new game:" + RESET);
+        String name = getStringInput(CYAN + "Enter game name: " + RESET, 3, 50);
+        int difficulty = getIntInput(CYAN + "Enter game difficulty: " + RESET, 1, 10);
+        int averageMatchDuration = getIntInput(CYAN + "Enter average match duration in minutes: " + RESET, 1, 180);
 
         Game game = new Game();
         game.setName(name);
@@ -333,92 +378,83 @@ public class ConsoleInterface {
 
         try {
             gameController.createGame(game);
-            System.out.println("Game created successfully.");
+            System.out.println(GREEN + SUCCESS_EMOJI + " Game created successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error creating game: " + e.getMessage());
-        }
-    }
-
-    private void editGame() {
-        String name = getStringInput("Enter the name of the game to edit: ");
-        Game game = gameController.getGameByName(name);
-        if (game == null) {
-            System.out.println("Game not found.");
-            return;
-        }
-
-        String newName = getStringInput("Enter new game name (3-50 characters, press enter to keep current): ");
-        if (!newName.isEmpty()) {
-            game.setName(newName);
-        }
-
-        int newDifficulty = getIntInput("Enter new game difficulty (1-10, press enter to keep current): ");
-        if (newDifficulty != -1) {
-            game.setDifficulty(newDifficulty);
-        }
-
-        int newAverageMatchDuration = getIntInput("Enter new average match duration in minutes (1-180, press enter to keep current): ");
-        if (newAverageMatchDuration != -1) {
-            game.setAverageMatchDuration(newAverageMatchDuration);
-        }
-
-        try {
-            gameController.updateGame(game);
-            System.out.println("Game updated successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error updating game: " + e.getMessage());
-        }
-    }
-
-    private void deleteGame() {
-        String name = getStringInput("Enter the name of the game to delete: ");
-        try {
-            gameController.deleteGameByName(name);
-            System.out.println("Game deleted successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error deleting game: " + e.getMessage());
-        }
-    }
-
-    private void removePlayerFromTeam() {
-        String teamName = getStringInput("Enter team name: ");
-        String playerUsername = getStringInput("Enter player username: ");
-
-        try {
-            teamController.removePlayerFromTeam(teamName, playerUsername);
-            System.out.println("Player removed from the team successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error removing player from team: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error creating game: " + e.getMessage() + RESET);
         }
     }
 
     private void viewAllGames() {
         List<Game> games = gameController.getAllGames();
         if (games.isEmpty()) {
-            System.out.println("No games found.");
+            System.out.println(YELLOW + WARNING_EMOJI + " No games found." + RESET);
         } else {
-            System.out.println("\nAll Games:");
+            System.out.println("\n" + BLUE + VIEW_EMOJI + " All Games:" + RESET);
             for (Game game : games) {
-                System.out.println("Name: " + game.getName() + ", Difficulty: " + game.getDifficulty() + ", Average Match Duration: " + game.getAverageMatchDuration() + " minutes");
+                System.out.println(CYAN + "Name: " + game.getName()
+                        + ", Difficulty: " + game.getDifficulty()
+                        + ", Average Match Duration: " + game.getAverageMatchDuration() + " minutes" + RESET);
             }
+        }
+    }
+
+    private void editGame() {
+        String name = getStringInput(CYAN + "Enter the name of the game to edit: " + RESET);
+        Game game = gameController.getGameByName(name);
+        if (game == null) {
+            System.out.println(RED + ERROR_EMOJI + " Game not found." + RESET);
+            return;
+        }
+
+        System.out.println(YELLOW + EDIT_EMOJI + " Editing game: " + name + RESET);
+        String newName = getStringInput(CYAN + "Enter new game name (3-50 characters, press enter to keep current): " + RESET);
+        if (!newName.isEmpty()) {
+            game.setName(newName);
+        }
+
+        int newDifficulty = getIntInput(CYAN + "Enter new game difficulty (1-10, press enter to keep current): " + RESET, 1, 10);
+        if (newDifficulty != -1) {
+            game.setDifficulty(newDifficulty);
+        }
+
+        int newAverageMatchDuration = getIntInput(CYAN + "Enter new average match duration in minutes (1-180, press enter to keep current): " + RESET, 1, 180);
+        if (newAverageMatchDuration != -1) {
+            game.setAverageMatchDuration(newAverageMatchDuration);
+        }
+
+        try {
+            gameController.updateGame(game);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Game updated successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error updating game: " + e.getMessage() + RESET);
+        }
+    }
+
+    private void deleteGame() {
+        String name = getStringInput(CYAN + "Enter the name of the game to delete: " + RESET);
+        try {
+            gameController.deleteGameByName(name);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Game deleted successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error deleting game: " + e.getMessage() + RESET);
         }
     }
 
     private void handleTournamentMenu() {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Tournament Management ---");
-            System.out.println("1. Create Tournament");
-            System.out.println("2. View All Tournaments");
-            System.out.println("3. Edit Tournament");
-            System.out.println("4. Delete Tournament");
-            System.out.println("5. Add Team to Tournament");
-            System.out.println("6. Remove Team from Tournament");
-            System.out.println("7. Add Game to Tournament");
-            System.out.println("8. Change Tournament Status");
-            System.out.println("9. Calculate Estimated Duration");
-            System.out.println("10. Back to Main Menu");
-            int choice = getIntInput("Enter your choice: ");
+            System.out.println("\n" + PURPLE + TOURNAMENT_EMOJI + " --- Tournament Management --- " + TOURNAMENT_EMOJI + RESET);
+            System.out.println(BLUE + "1. " + ADD_EMOJI + " Create Tournament" + RESET);
+            System.out.println(BLUE + "2. " + VIEW_EMOJI + " View All Tournaments" + RESET);
+            System.out.println(BLUE + "3. " + EDIT_EMOJI + " Edit Tournament" + RESET);
+            System.out.println(BLUE + "4. " + DELETE_EMOJI + " Delete Tournament" + RESET);
+            System.out.println(BLUE + "5. " + ADD_EMOJI + " Add Team to Tournament" + RESET);
+            System.out.println(BLUE + "6. " + REMOVE_EMOJI + " Remove Team from Tournament" + RESET);
+            System.out.println(BLUE + "7. " + ADD_EMOJI + " Add Game to Tournament" + RESET);
+            System.out.println(BLUE + "8. " + STATUS_EMOJI + " Change Tournament Status" + RESET);
+            System.out.println(BLUE + "9. " + TIME_EMOJI + " Calculate Estimated Duration" + RESET);
+            System.out.println(BLUE + "10. " + EXIT_EMOJI + " Back to Main Menu" + RESET);
+            int choice = getIntInput(CYAN + "Enter your choice: " + RESET, 1, 10);
             switch (choice) {
                 case 1:
                     createTournament();
@@ -451,29 +487,25 @@ public class ConsoleInterface {
                     back = true;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println(RED + ERROR_EMOJI + " Invalid choice. Please try again." + RESET);
             }
         }
     }
 
     private void createTournament() {
-        System.out.println("\nCreating a new tournament:");
-        String title = getStringInput("Enter tournament title: ", 1, 100);
-        String startDateStr = getStringInput("Enter start date (yyyy-MM-dd): ");
-        String endDateStr = getStringInput("Enter end date (yyyy-MM-dd): ");
-        int spectatorCount = getIntInput("Enter spectator count: ", 0, Integer.MAX_VALUE);
-        int matchBreakTime = getIntInput("Enter match break time in minutes: ", 0, Integer.MAX_VALUE);
-        int ceremonyTime = getIntInput("Enter ceremony time in minutes: ", 0, Integer.MAX_VALUE);
+        System.out.println("\n" + YELLOW + ADD_EMOJI + " Creating a new tournament:" + RESET);
+        String title = getStringInput(CYAN + "Enter tournament title: " + RESET, 1, 100);
+        Date startDate = getDateInput(CYAN + "Enter start date (yyyy-MM-dd): " + RESET);
+        Date endDate = getDateInput(CYAN + "Enter end date (yyyy-MM-dd): " + RESET);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate, endDate;
-        try {
-            startDate = dateFormat.parse(startDateStr);
-            endDate = dateFormat.parse(endDateStr);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+        if (endDate.before(startDate)) {
+            System.out.println(RED + ERROR_EMOJI + " End date cannot be before start date. Please try again." + RESET);
             return;
         }
+
+        int spectatorCount = getIntInput(CYAN + "Enter spectator count: " + RESET, 0, Integer.MAX_VALUE);
+        int matchBreakTime = getIntInput(CYAN + "Enter match break time in minutes: " + RESET, 0, Integer.MAX_VALUE);
+        int ceremonyTime = getIntInput(CYAN + "Enter ceremony time in minutes: " + RESET, 0, Integer.MAX_VALUE);
 
         Tournament tournament = new Tournament();
         tournament.setTitle(title);
@@ -486,230 +518,241 @@ public class ConsoleInterface {
 
         try {
             tournamentController.createTournament(tournament);
-            System.out.println("Tournament created successfully.");
+            System.out.println(GREEN + SUCCESS_EMOJI + " Tournament created successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error creating tournament: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error creating tournament: " + e.getMessage() + RESET);
         }
     }
 
     private void viewAllTournaments() {
         List<Tournament> tournaments = tournamentController.getAllTournaments();
         if (tournaments.isEmpty()) {
-            System.out.println("No tournaments found.");
+            System.out.println(YELLOW + WARNING_EMOJI + " No tournaments found." + RESET);
         } else {
-            System.out.println("\nAll Tournaments:");
+            System.out.println("\n" + BLUE + VIEW_EMOJI + " All Tournaments:" + RESET);
             for (Tournament tournament : tournaments) {
                 Set<Team> teams = tournament.getTeams();
                 int estimatedDuration = tournamentController.calculateEstimatedDuration(tournament.getTitle());
-                System.out.println("Title: " + tournament.getTitle()
+                System.out.println(CYAN + "Title: " + tournament.getTitle()
                         + ", Game: " + (tournament.getGame() != null ? tournament.getGame().getName() : "N/A")
                         + ", Status: " + tournament.getStatus()
                         + ", Teams: " + teams.size()
                         + " (" + String.join(", ", teams.stream().map(Team::getName).toArray(String[]::new)) + ")"
-                        + ", Estimated Duration: " + estimatedDuration + " minutes");
+                        + ", Estimated Duration: " + estimatedDuration + " minutes" + RESET);
             }
-        }
-    }
-
-    private void addTeamToTournament() {
-        String tournamentTitle = getStringInput("Enter tournament title: ");
-        String teamName = getStringInput("Enter team name: ");
-
-        try {
-            tournamentController.addTeamToTournament(tournamentTitle, teamName);
-            System.out.println("Team added to the tournament successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error adding team to tournament: " + e.getMessage());
-        }
-    }
-
-    private String getStringInput(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
-    }
-
-    private int getIntInput(String prompt) {
-        while (true) {
-            try {
-                System.out.print(prompt);
-                return Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
-            }
-        }
-    }
-
-    public void updateTournamentStatuses() {
-        tournamentController.updateTournamentStatuses();
-    }
-
-    private void addGameToTournament() {
-        String tournamentTitle = getStringInput("Enter tournament title: ");
-        String gameName = getStringInput("Enter game name: ");
-
-        try {
-            tournamentController.addGameToTournament(tournamentTitle, gameName);
-            System.out.println("Game added to the tournament successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error adding game to tournament: " + e.getMessage());
         }
     }
 
     private void editTournament() {
-        String title = getStringInput("Enter the title of the tournament to edit: ");
+        String title = getStringInput(CYAN + "Enter the title of the tournament to edit: " + RESET);
         Tournament tournament = tournamentController.getTournamentByTitle(title);
         if (tournament == null) {
-            System.out.println("Tournament not found.");
+            System.out.println(RED + ERROR_EMOJI + " Tournament not found." + RESET);
             return;
         }
 
-        String newTitle = getStringInput("Enter new tournament title (1-100 characters, press enter to keep current): ");
+        System.out.println(YELLOW + EDIT_EMOJI + " Editing tournament: " + title + RESET);
+        String newTitle = getStringInput(CYAN + "Enter new tournament title (1-100 characters, press enter to keep current): " + RESET);
         if (!newTitle.isEmpty()) {
             tournament.setTitle(newTitle);
         }
 
-        String startDateStr = getStringInput("Enter new start date (yyyy-MM-dd, press enter to keep current): ");
-        if (!startDateStr.isEmpty()) {
-            try {
-                Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
-                tournament.setStartDate(startDate);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Date not updated.");
-            }
+        String startDatePrompt = CYAN + "Enter new start date (yyyy-MM-dd, press enter to keep current): " + RESET;
+        String endDatePrompt = CYAN + "Enter new end date (yyyy-MM-dd, press enter to keep current): " + RESET;
+
+        Date newStartDate = getOptionalDateInput(startDatePrompt, tournament.getStartDate());
+        Date newEndDate = getOptionalDateInput(endDatePrompt, tournament.getEndDate());
+
+        if (newEndDate.before(newStartDate)) {
+            System.out.println(RED + ERROR_EMOJI + " End date cannot be before start date. Changes not applied." + RESET);
+        } else {
+            tournament.setStartDate(newStartDate);
+            tournament.setEndDate(newEndDate);
         }
 
-        String endDateStr = getStringInput("Enter new end date (yyyy-MM-dd, press enter to keep current): ");
-        if (!endDateStr.isEmpty()) {
-            try {
-                Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
-                tournament.setEndDate(endDate);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Date not updated.");
-            }
-        }
-
-        int newSpectatorCount = getIntInput("Enter new spectator count (press enter to keep current): ");
+        int newSpectatorCount = getIntInput(CYAN + "Enter new spectator count (press enter to keep current): " + RESET, 0, Integer.MAX_VALUE);
         if (newSpectatorCount != -1) {
             tournament.setSpectatorCount(newSpectatorCount);
         }
 
-        int newMatchBreakTime = getIntInput("Enter new match break time in minutes (press enter to keep current): ");
+        int newMatchBreakTime = getIntInput(CYAN + "Enter new match break time in minutes (press enter to keep current): " + RESET, 0, Integer.MAX_VALUE);
         if (newMatchBreakTime != -1) {
             tournament.setMatchBreakTime(newMatchBreakTime);
         }
 
-        int newCeremonyTime = getIntInput("Enter new ceremony time in minutes (press enter to keep current): ");
+        int newCeremonyTime = getIntInput(CYAN + "Enter new ceremony time in minutes (press enter to keep current): " + RESET, 0, Integer.MAX_VALUE);
         if (newCeremonyTime != -1) {
             tournament.setCeremonyTime(newCeremonyTime);
         }
 
         try {
             tournamentController.updateTournament(tournament);
-            System.out.println("Tournament updated successfully.");
+            System.out.println(GREEN + SUCCESS_EMOJI + " Tournament updated successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error updating tournament: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error updating tournament: " + e.getMessage() + RESET);
+        }
+    }
+
+    private void deleteTournament() {
+        String title = getStringInput(CYAN + "Enter tournament title to delete: " + RESET);
+        try {
+            tournamentController.deleteTournamentByTitle(title);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Tournament deleted successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error deleting tournament: " + e.getMessage() + RESET);
+        }
+    }
+
+    private void addTeamToTournament() {
+        String tournamentTitle = getStringInput(CYAN + "Enter tournament title: " + RESET);
+        String teamName = getStringInput(CYAN + "Enter team name: " + RESET);
+
+        try {
+            tournamentController.addTeamToTournament(tournamentTitle, teamName);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Team added to the tournament successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error adding team to tournament: " + e.getMessage() + RESET);
         }
     }
 
     private void removeTeamFromTournament() {
-        String tournamentTitle = getStringInput("Enter tournament title: ");
-        String teamName = getStringInput("Enter team name: ");
+        String tournamentTitle = getStringInput(CYAN + "Enter tournament title: " + RESET);
+        String teamName = getStringInput(CYAN + "Enter team name: " + RESET);
 
         try {
             tournamentController.removeTeamFromTournament(tournamentTitle, teamName);
-            System.out.println("Team removed from the tournament successfully.");
+            System.out.println(GREEN + SUCCESS_EMOJI + " Team removed from the tournament successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error removing team from tournament: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error removing team from tournament: " + e.getMessage() + RESET);
+        }
+    }
+
+    private void addGameToTournament() {
+        String tournamentTitle = getStringInput(CYAN + "Enter tournament title: " + RESET);
+        String gameName = getStringInput(CYAN + "Enter game name: " + RESET);
+
+        try {
+            tournamentController.addGameToTournament(tournamentTitle, gameName);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Game added to the tournament successfully." + RESET);
+        } catch (IllegalArgumentException e) {
+            System.out.println(RED + ERROR_EMOJI + " Error adding game to tournament: " + e.getMessage() + RESET);
         }
     }
 
     private void changeTournamentStatus() {
-        String tournamentTitle = getStringInput("Enter tournament title: ");
-        System.out.println("Available statuses: PLANNED, IN_PROGRESS, COMPLETED, CANCELLED");
-        String statusStr = getStringInput("Enter new status: ");
+        String title = getStringInput(CYAN + "Enter tournament title: " + RESET);
+        TournamentStatus status = getTournamentStatusInput(CYAN + "Enter new status (PLANNED, ONGOING, COMPLETED): " + RESET);
+
         try {
-            TournamentStatus newStatus = TournamentStatus.valueOf(statusStr.toUpperCase());
-            tournamentController.changeStatus(tournamentTitle, newStatus);
-            System.out.println("Tournament status changed successfully.");
+            tournamentController.changeStatus(title, status);
+            System.out.println(GREEN + SUCCESS_EMOJI + " Tournament status changed successfully." + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error changing tournament status: " + e.getMessage());
-        }
-    }
-
-    private void updateTournament() {
-        String title = getStringInput("Enter tournament title to update: ");
-        Tournament tournament = tournamentController.getTournamentByTitle(title);
-        if (tournament == null) {
-            System.out.println("Tournament not found.");
-            return;
-        }
-
-        String newTitle = getStringInput("Enter new title (press enter to keep current): ");
-        if (!newTitle.isEmpty()) {
-            tournament.setTitle(newTitle);
-        }
-
-        String startDateStr = getStringInput("Enter new start date (yyyy-MM-dd) (press enter to keep current): ");
-        if (!startDateStr.isEmpty()) {
-            try {
-                Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
-                tournament.setStartDate(startDate);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Date not updated.");
-            }
-        }
-
-        String endDateStr = getStringInput("Enter new end date (yyyy-MM-dd) (press enter to keep current): ");
-        if (!endDateStr.isEmpty()) {
-            try {
-                Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
-                tournament.setEndDate(endDate);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Date not updated.");
-            }
-        }
-
-        tournamentController.updateTournament(tournament);
-        System.out.println("Tournament updated successfully.");
-    }
-
-    private void deleteTournament() {
-        String title = getStringInput("Enter tournament title to delete: ");
-        try {
-            tournamentController.deleteTournamentByTitle(title);
-            System.out.println("Tournament deleted successfully.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error deleting tournament: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error changing tournament status: " + e.getMessage() + RESET);
         }
     }
 
     private void calculateEstimatedDuration() {
-        String title = getStringInput("Enter tournament title: ");
+        String title = getStringInput(CYAN + "Enter tournament title: " + RESET);
+
         try {
-            int duration = tournamentController.calculateEstimatedDuration(title);
-            System.out.println("Estimated duration for tournament '" + title + "': " + duration + " minutes");
+            int estimatedDuration = tournamentController.calculateEstimatedDuration(title);
+            System.out.println(CYAN + "Estimated Duration: " + estimatedDuration + " minutes" + RESET);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error calculating estimated duration: " + e.getMessage());
+            System.out.println(RED + ERROR_EMOJI + " Error calculating estimated duration: " + e.getMessage() + RESET);
         }
     }
 
     private String getStringInput(String prompt, int minLength, int maxLength) {
-        while (true) {
-            String input = getStringInput(prompt);
-            if (input.length() >= minLength && input.length() <= maxLength) {
-                return input;
-            }
-            System.out.println("Input must be between " + minLength + " and " + maxLength + " characters long.");
+        System.out.print(prompt);
+        String input = scanner.nextLine();
+        while (input.length() < minLength || input.length() > maxLength) {
+            System.out.println(RED + ERROR_EMOJI + " Invalid input length. Please try again." + RESET);
+            System.out.print(prompt);
+            input = scanner.nextLine();
         }
+        return input;
     }
 
     private int getIntInput(String prompt, int min, int max) {
-        while (true) {
-            int input = getIntInput(prompt);
-            if (input >= min && input <= max) {
-                return input;
+        System.out.print(prompt);
+        int input;
+        try {
+            input = Integer.parseInt(scanner.nextLine());
+            while (input < min || input > max) {
+                System.out.println(RED + ERROR_EMOJI + " Invalid input range. Please try again." + RESET);
+                System.out.print(prompt);
+                input = Integer.parseInt(scanner.nextLine());
             }
-            System.out.println("Input must be between " + min + " and " + max + ".");
+        } catch (NumberFormatException e) {
+            System.out.println(RED + ERROR_EMOJI + " Invalid input type. Please try again." + RESET);
+            return getIntInput(prompt, min, max);
+        }
+        return input;
+    }
+
+    private String getStringInput(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
+
+    private TournamentStatus getTournamentStatusInput(String prompt) {
+        System.out.print(prompt);
+        String input = scanner.nextLine().toUpperCase();
+        while (!input.equals("PLANNED") && !input.equals("ONGOING") && !input.equals("COMPLETED")) {
+            System.out.println(RED + ERROR_EMOJI + " Invalid status. Please try again." + RESET);
+            System.out.print(prompt);
+            input = scanner.nextLine().toUpperCase();
+        }
+        return TournamentStatus.valueOf(input);
+    }
+
+    private Date getOptionalDateInput(String prompt, Date currentDate) {
+        String dateStr = getStringInput(prompt);
+        if (dateStr.isEmpty()) {
+            return currentDate;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        while (true) {
+            try {
+                Date inputDate = dateFormat.parse(dateStr);
+                Date today = new Date();
+                if (inputDate.before(today)) {
+                    System.out.println(RED + ERROR_EMOJI + " Date must be present or in the future. Please try again." + RESET);
+                    dateStr = getStringInput(prompt);
+                    if (dateStr.isEmpty()) {
+                        return currentDate;
+                    }
+                } else {
+                    return inputDate;
+                }
+            } catch (ParseException e) {
+                System.out.println(RED + ERROR_EMOJI + " Invalid date format. Please use yyyy-MM-dd or press enter to keep current." + RESET);
+                dateStr = getStringInput(prompt);
+                if (dateStr.isEmpty()) {
+                    return currentDate;
+                }
+            }
         }
     }
+
+    private Date getDateInput(String prompt) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        while (true) {
+            String dateStr = getStringInput(prompt);
+            try {
+                Date inputDate = dateFormat.parse(dateStr);
+                Date today = new Date();
+                if (inputDate.before(today)) {
+                    System.out.println(RED + ERROR_EMOJI + " Date must be present or in the future. Please try again." + RESET);
+                } else {
+                    return inputDate;
+                }
+            } catch (ParseException e) {
+                System.out.println(RED + ERROR_EMOJI + " Invalid date format. Please use yyyy-MM-dd." + RESET);
+            }
+        }
+    }
+
 }

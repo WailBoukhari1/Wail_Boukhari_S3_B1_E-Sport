@@ -6,14 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5f543600-f395-4dbd-8f9e-cb8c792862d2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/TeamServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/TeamServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/TournamentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/service/impl/TournamentServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/esports/ui/ConsoleInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esports/ui/ConsoleInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/blog/AppTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/esports/service/GameServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/esports/service/GameServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/esports/service/PlayerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/esports/service/PlayerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/esports/service/TeamServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/esports/service/TeamServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/esports/service/TournamentServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/esports/service/TournamentServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +90,7 @@
       <workItem from="1729592056803" duration="30000" />
       <workItem from="1729592504834" duration="3227000" />
       <workItem from="1729609910966" duration="16706000" />
-      <workItem from="1729758018163" duration="2143000" />
+      <workItem from="1729758018163" duration="4575000" />
     </task>
     <servers />
   </component>
