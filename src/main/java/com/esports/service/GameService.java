@@ -12,6 +12,4 @@ public interface GameService {
     void delete(Long id);
     Game getGameByName(String name);
     void deleteGameByName(String name);
-    void addTeamToGame(String gameName, String teamName);
-    void removeTeamFromGame(String gameName, String teamName);
 }

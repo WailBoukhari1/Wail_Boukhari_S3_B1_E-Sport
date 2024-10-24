@@ -17,7 +17,6 @@ public interface TournamentService {
     void deleteTournamentByTitle(String title);
     void changeStatus(String tournamentTitle, TournamentStatus newStatus);
     void cancelTournament(String tournamentTitle);
-    void updateTournamentStatuses();
     void createTournamentWithGame(String title, String gameName, int difficulty, int averageMatchDuration, List<String> teamNames);
     int calculateEstimatedDuration(String title);
     void addGameToTournament(String tournamentTitle, String gameName);

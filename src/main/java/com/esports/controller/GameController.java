@@ -42,14 +42,4 @@ public class GameController {
         LOGGER.info("Deleting game by name: {}", name);
         gameService.deleteGameByName(name);
     }
-
-    public void addTeamToGame(String gameName, String teamName) {
-        LOGGER.info("Adding team {} to game {}", teamName, gameName);
-        gameService.addTeamToGame(gameName, teamName);
-    }
-
-    public void removeTeamFromGame(String gameName, String teamName) {
-        LOGGER.info("Removing team {} from game {}", teamName, gameName);
-        gameService.removeTeamFromGame(gameName, teamName);
-    }
 }

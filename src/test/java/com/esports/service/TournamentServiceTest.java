@@ -126,8 +126,10 @@ public class TournamentServiceTest {
 
     @Test
     public void testUpdateTournamentStatuses() {
-        tournamentService.updateTournamentStatuses();
-        verify(tournamentService).updateTournamentStatuses();
+        String tournamentTitle = "TestTournament";
+        TournamentStatus newStatus = TournamentStatus.IN_PROGRESS;
+        tournamentService.changeStatus(tournamentTitle, newStatus);
+        verify(tournamentService).changeStatus(tournamentTitle, newStatus);
     }
 
     @Test

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.esports.model.Game;
-import com.esports.model.Team;
 import com.esports.repository.GameRepository;
 import com.esports.repository.TeamRepository;
 import com.esports.service.GameService;
@@ -60,45 +59,6 @@ public class GameServiceImpl implements GameService {
         Game game = getGameByName(name);
         if (game != null) {
             delete(game.getId());
-        }
-    }
-
-    @Override
-    @Transactional
-    public void addTeamToGame(String gameName, String teamName) {
-        Game game = gameRepository.findByName(gameName);
-        if (game == null) {
-            throw new IllegalArgumentException("Game not found with name: " + gameName);
-        }
-
-        Team team = teamRepository.findByName(teamName);
-        if (team == null) {
-            throw new IllegalArgumentException("Team not found with name: " + teamName);
-        }
-
-        game.getTeams().add(team);
-        team.getGames().add(game);
-
-        gameRepository.update(game);
-        teamRepository.update(team);
-    }
-
-    @Override
-    public void removeTeamFromGame(String gameName, String teamName) {
-        Game game = gameRepository.findByName(gameName);
-        if (game == null) {
-            throw new IllegalArgumentException("Game not found with name: " + gameName);
-        }
-
-        Team team = teamRepository.findByName(teamName);
-        if (team == null) {
-            throw new IllegalArgumentException("Team not found with name: " + teamName);
-        }
-
-        if (game.getTeams().remove(team)) {
-            team.getGames().remove(game);
-            gameRepository.update(game);
-            teamRepository.update(team);
         }
     }
 }

@@ -154,21 +154,6 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     @Override
-    public void updateTournamentStatuses() {
-        LOGGER.info("Updating tournament statuses");
-        List<Tournament> tournaments = findAll();
-        for (Tournament tournament : tournaments) {
-            if (tournament.getStatus() == TournamentStatus.PLANNED && tournament.getStartDate().before(new java.util.Date())) {
-                tournament.setStatus(TournamentStatus.IN_PROGRESS);
-                update(tournament);
-            } else if (tournament.getStatus() == TournamentStatus.IN_PROGRESS && tournament.getEndDate().before(new java.util.Date())) {
-                tournament.setStatus(TournamentStatus.COMPLETED);
-                update(tournament);
-            }
-        }
-    }
-
-    @Override
     public void createTournamentWithGame(String title, String gameName, int difficulty, int averageMatchDuration, List<String> teamNames) {
         Game game = new Game();
         game.setName(gameName);

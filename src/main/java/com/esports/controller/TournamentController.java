@@ -64,11 +64,6 @@ public class TournamentController {
         tournamentService.cancelTournament(tournamentTitle);
     }
 
-    public void updateTournamentStatuses() {
-        LOGGER.info("Updating tournament statuses");
-        tournamentService.updateTournamentStatuses();
-    }
-
     public void createTournamentWithGame(String title, String gameName, int difficulty, int averageMatchDuration, List<String> teamNames) {
         LOGGER.info("Creating new tournament with game and teams: {}", title);
         tournamentService.createTournamentWithGame(title, gameName, difficulty, averageMatchDuration, teamNames);
