@@ -51,6 +51,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional
     public void addPlayerToTeam(String teamName, String playerUsername) {
         Team team = teamRepository.findByName(teamName);
         if (team == null) {
@@ -62,8 +63,14 @@ public class TeamServiceImpl implements TeamService {
             throw new IllegalArgumentException("Player not found with username: " + playerUsername);
         }
 
+        // Remove player from their current team, if any
+        if (player.getTeam() != null) {
+            player.getTeam().getPlayers().remove(player);
+        }
+
         team.getPlayers().add(player);
         player.setTeam(team);
+
         teamRepository.update(team);
         playerRepository.update(player);
     }

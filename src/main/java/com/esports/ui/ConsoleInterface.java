@@ -80,7 +80,9 @@ public class ConsoleInterface {
             System.out.println("\n--- Player Management ---");
             System.out.println("1. Create Player");
             System.out.println("2. View All Players");
-            System.out.println("3. Back to Main Menu");
+            System.out.println("3. Edit Player");
+            System.out.println("4. Delete Player");
+            System.out.println("5. Back to Main Menu");
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
@@ -90,6 +92,12 @@ public class ConsoleInterface {
                     viewAllPlayers();
                     break;
                 case 3:
+                    editPlayer();
+                    break;
+                case 4:
+                    deletePlayer();
+                    break;
+                case 5:
                     back = true;
                     break;
                 default:
@@ -100,20 +108,54 @@ public class ConsoleInterface {
 
     private void createPlayer() {
         System.out.println("\nCreating a new player:");
-        String username = getStringInput("Enter username (3-50 characters): ");
-        int age = getIntInput("Enter age (13-100): ");
-        String teamName = getStringInput("Enter team name: ");
-
+        String username = getStringInput("Enter username: ", 3, 50);
+        int age = getIntInput("Enter age: ", 13, 100);
+    
         Player player = new Player();
         player.setUsername(username);
         player.setAge(age);
-
+    
         try {
             playerController.createPlayer(player);
-            teamController.addPlayerToTeam(teamName, username);
-            System.out.println("Player created successfully and added to the team.");
+            System.out.println("Player created successfully.");
         } catch (IllegalArgumentException e) {
             System.out.println("Error creating player: " + e.getMessage());
+        }
+    }
+
+    private void editPlayer() {
+        String username = getStringInput("Enter the username of the player to edit: ");
+        Player player = playerController.getPlayerByUsername(username);
+        if (player == null) {
+            System.out.println("Player not found.");
+            return;
+        }
+    
+        String newUsername = getStringInput("Enter new username (3-50 characters, press enter to keep current): ");
+        if (!newUsername.isEmpty()) {
+            player.setUsername(newUsername);
+        }
+    
+        int newAge = getIntInput("Enter new age (13-100, press enter to keep current): ", 13, 100);
+        if (newAge != -1) {
+            player.setAge(newAge);
+        }
+    
+        try {
+            playerController.updatePlayer(player);
+            System.out.println("Player updated successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error updating player: " + e.getMessage());
+        }
+    }
+
+    private void deletePlayer() {
+        String username = getStringInput("Enter the username of the player to delete: ");
+        try {
+            playerController.deletePlayerByUsername(username);
+            System.out.println("Player deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error deleting player: " + e.getMessage());
         }
     }
 
@@ -135,8 +177,11 @@ public class ConsoleInterface {
             System.out.println("\n--- Team Management ---");
             System.out.println("1. Create Team");
             System.out.println("2. View All Teams");
-            System.out.println("3. Add Player to Team");
-            System.out.println("4. Back to Main Menu");
+            System.out.println("3. Edit Team");
+            System.out.println("4. Delete Team");
+            System.out.println("5. Add Player to Team");
+            System.out.println("6. Remove Player from Team");
+            System.out.println("7. Back to Main Menu");
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
@@ -146,9 +191,18 @@ public class ConsoleInterface {
                     viewAllTeams();
                     break;
                 case 3:
-                    addPlayerToTeam();
+                    editTeam();
                     break;
                 case 4:
+                    deleteTeam();
+                    break;
+                case 5:
+                    addPlayerToTeam();
+                    break;
+                case 6:
+                    removePlayerFromTeam();
+                    break;
+                case 7:
                     back = true;
                     break;
                 default:
@@ -159,8 +213,8 @@ public class ConsoleInterface {
 
     private void createTeam() {
         System.out.println("\nCreating a new team:");
-        String name = getStringInput("Enter team name (3-50 characters): ");
-        int ranking = getIntInput("Enter team ranking (1-1000): ");
+        String name = getStringInput("Enter team name: ", 3, 50);
+        int ranking = getIntInput("Enter team ranking: ", 1, 1000);
 
         Team team = new Team();
         team.setName(name);
@@ -171,6 +225,42 @@ public class ConsoleInterface {
             System.out.println("Team created successfully.");
         } catch (IllegalArgumentException e) {
             System.out.println("Error creating team: " + e.getMessage());
+        }
+    }
+
+    private void editTeam() {
+        String name = getStringInput("Enter the name of the team to edit: ");
+        Team team = teamController.getTeamByName(name);
+        if (team == null) {
+            System.out.println("Team not found.");
+            return;
+        }
+
+        String newName = getStringInput("Enter new team name (3-50 characters, press enter to keep current): ");
+        if (!newName.isEmpty()) {
+            team.setName(newName);
+        }
+
+        int newRanking = getIntInput("Enter new team ranking (1-1000, press enter to keep current): ");
+        if (newRanking != -1) {
+            team.setRanking(newRanking);
+        }
+
+        try {
+            teamController.updateTeam(team);
+            System.out.println("Team updated successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error updating team: " + e.getMessage());
+        }
+    }
+
+    private void deleteTeam() {
+        String name = getStringInput("Enter the name of the team to delete: ");
+        try {
+            teamController.deleteTeamByName(name);
+            System.out.println("Team deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error deleting team: " + e.getMessage());
         }
     }
 
@@ -204,7 +294,9 @@ public class ConsoleInterface {
             System.out.println("\n--- Game Management ---");
             System.out.println("1. Create Game");
             System.out.println("2. View All Games");
-            System.out.println("3. Back to Main Menu");
+            System.out.println("3. Edit Game");
+            System.out.println("4. Delete Game");
+            System.out.println("5. Back to Main Menu");
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
@@ -214,6 +306,12 @@ public class ConsoleInterface {
                     viewAllGames();
                     break;
                 case 3:
+                    editGame();
+                    break;
+                case 4:
+                    deleteGame();
+                    break;
+                case 5:
                     back = true;
                     break;
                 default:
@@ -224,9 +322,9 @@ public class ConsoleInterface {
 
     private void createGame() {
         System.out.println("\nCreating a new game:");
-        String name = getStringInput("Enter game name (3-50 characters): ");
-        int difficulty = getIntInput("Enter game difficulty (1-10): ");
-        int averageMatchDuration = getIntInput("Enter average match duration in minutes (1-180): ");
+        String name = getStringInput("Enter game name: ", 3, 50);
+        int difficulty = getIntInput("Enter game difficulty: ", 1, 10);
+        int averageMatchDuration = getIntInput("Enter average match duration in minutes: ", 1, 180);
 
         Game game = new Game();
         game.setName(name);
@@ -238,6 +336,59 @@ public class ConsoleInterface {
             System.out.println("Game created successfully.");
         } catch (IllegalArgumentException e) {
             System.out.println("Error creating game: " + e.getMessage());
+        }
+    }
+
+    private void editGame() {
+        String name = getStringInput("Enter the name of the game to edit: ");
+        Game game = gameController.getGameByName(name);
+        if (game == null) {
+            System.out.println("Game not found.");
+            return;
+        }
+
+        String newName = getStringInput("Enter new game name (3-50 characters, press enter to keep current): ");
+        if (!newName.isEmpty()) {
+            game.setName(newName);
+        }
+
+        int newDifficulty = getIntInput("Enter new game difficulty (1-10, press enter to keep current): ");
+        if (newDifficulty != -1) {
+            game.setDifficulty(newDifficulty);
+        }
+
+        int newAverageMatchDuration = getIntInput("Enter new average match duration in minutes (1-180, press enter to keep current): ");
+        if (newAverageMatchDuration != -1) {
+            game.setAverageMatchDuration(newAverageMatchDuration);
+        }
+
+        try {
+            gameController.updateGame(game);
+            System.out.println("Game updated successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error updating game: " + e.getMessage());
+        }
+    }
+
+    private void deleteGame() {
+        String name = getStringInput("Enter the name of the game to delete: ");
+        try {
+            gameController.deleteGameByName(name);
+            System.out.println("Game deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error deleting game: " + e.getMessage());
+        }
+    }
+
+    private void removePlayerFromTeam() {
+        String teamName = getStringInput("Enter team name: ");
+        String playerUsername = getStringInput("Enter player username: ");
+
+        try {
+            teamController.removePlayerFromTeam(teamName, playerUsername);
+            System.out.println("Player removed from the team successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error removing player from team: " + e.getMessage());
         }
     }
 
@@ -259,12 +410,14 @@ public class ConsoleInterface {
             System.out.println("\n--- Tournament Management ---");
             System.out.println("1. Create Tournament");
             System.out.println("2. View All Tournaments");
-            System.out.println("3. Add Team to Tournament");
-            System.out.println("4. Add Game to Tournament");
-            System.out.println("5. Update Tournament");
-            System.out.println("6. Delete Tournament");
-            System.out.println("7. Calculate Estimated Duration");
-            System.out.println("8. Back to Main Menu");
+            System.out.println("3. Edit Tournament");
+            System.out.println("4. Delete Tournament");
+            System.out.println("5. Add Team to Tournament");
+            System.out.println("6. Remove Team from Tournament");
+            System.out.println("7. Add Game to Tournament");
+            System.out.println("8. Change Tournament Status");
+            System.out.println("9. Calculate Estimated Duration");
+            System.out.println("10. Back to Main Menu");
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
@@ -274,21 +427,27 @@ public class ConsoleInterface {
                     viewAllTournaments();
                     break;
                 case 3:
-                    addTeamToTournament();
+                    editTournament();
                     break;
                 case 4:
-                    addGameToTournament();
-                    break;
-                case 5:
-                    updateTournament();
-                    break;
-                case 6:
                     deleteTournament();
                     break;
+                case 5:
+                    addTeamToTournament();
+                    break;
+                case 6:
+                    removeTeamFromTournament();
+                    break;
                 case 7:
-                    calculateEstimatedDuration();
+                    addGameToTournament();
                     break;
                 case 8:
+                    changeTournamentStatus();
+                    break;
+                case 9:
+                    calculateEstimatedDuration();
+                    break;
+                case 10:
                     back = true;
                     break;
                 default:
@@ -299,12 +458,12 @@ public class ConsoleInterface {
 
     private void createTournament() {
         System.out.println("\nCreating a new tournament:");
-        String title = getStringInput("Enter tournament title (1-100 characters): ");
+        String title = getStringInput("Enter tournament title: ", 1, 100);
         String startDateStr = getStringInput("Enter start date (yyyy-MM-dd): ");
         String endDateStr = getStringInput("Enter end date (yyyy-MM-dd): ");
-        int spectatorCount = getIntInput("Enter spectator count: ");
-        int matchBreakTime = getIntInput("Enter match break time in minutes: ");
-        int ceremonyTime = getIntInput("Enter ceremony time in minutes: ");
+        int spectatorCount = getIntInput("Enter spectator count: ", 0, Integer.MAX_VALUE);
+        int matchBreakTime = getIntInput("Enter match break time in minutes: ", 0, Integer.MAX_VALUE);
+        int ceremonyTime = getIntInput("Enter ceremony time in minutes: ", 0, Integer.MAX_VALUE);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate, endDate;
@@ -328,7 +487,6 @@ public class ConsoleInterface {
         try {
             tournamentController.createTournament(tournament);
             System.out.println("Tournament created successfully.");
-
         } catch (IllegalArgumentException e) {
             System.out.println("Error creating tournament: " + e.getMessage());
         }
@@ -343,12 +501,12 @@ public class ConsoleInterface {
             for (Tournament tournament : tournaments) {
                 Set<Team> teams = tournament.getTeams();
                 int estimatedDuration = tournamentController.calculateEstimatedDuration(tournament.getTitle());
-                System.out.println("Title: " + tournament.getTitle() + 
-                                   ", Game: " + (tournament.getGame() != null ? tournament.getGame().getName() : "N/A") +
-                                   ", Status: " + tournament.getStatus() + 
-                                   ", Teams: " + teams.size() + 
-                                   " (" + String.join(", ", teams.stream().map(Team::getName).toArray(String[]::new)) + ")" +
-                                   ", Estimated Duration: " + estimatedDuration + " minutes");
+                System.out.println("Title: " + tournament.getTitle()
+                        + ", Game: " + (tournament.getGame() != null ? tournament.getGame().getName() : "N/A")
+                        + ", Status: " + tournament.getStatus()
+                        + ", Teams: " + teams.size()
+                        + " (" + String.join(", ", teams.stream().map(Team::getName).toArray(String[]::new)) + ")"
+                        + ", Estimated Duration: " + estimatedDuration + " minutes");
             }
         }
     }
@@ -394,6 +552,87 @@ public class ConsoleInterface {
             System.out.println("Game added to the tournament successfully.");
         } catch (IllegalArgumentException e) {
             System.out.println("Error adding game to tournament: " + e.getMessage());
+        }
+    }
+
+    private void editTournament() {
+        String title = getStringInput("Enter the title of the tournament to edit: ");
+        Tournament tournament = tournamentController.getTournamentByTitle(title);
+        if (tournament == null) {
+            System.out.println("Tournament not found.");
+            return;
+        }
+
+        String newTitle = getStringInput("Enter new tournament title (1-100 characters, press enter to keep current): ");
+        if (!newTitle.isEmpty()) {
+            tournament.setTitle(newTitle);
+        }
+
+        String startDateStr = getStringInput("Enter new start date (yyyy-MM-dd, press enter to keep current): ");
+        if (!startDateStr.isEmpty()) {
+            try {
+                Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
+                tournament.setStartDate(startDate);
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Date not updated.");
+            }
+        }
+
+        String endDateStr = getStringInput("Enter new end date (yyyy-MM-dd, press enter to keep current): ");
+        if (!endDateStr.isEmpty()) {
+            try {
+                Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
+                tournament.setEndDate(endDate);
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Date not updated.");
+            }
+        }
+
+        int newSpectatorCount = getIntInput("Enter new spectator count (press enter to keep current): ");
+        if (newSpectatorCount != -1) {
+            tournament.setSpectatorCount(newSpectatorCount);
+        }
+
+        int newMatchBreakTime = getIntInput("Enter new match break time in minutes (press enter to keep current): ");
+        if (newMatchBreakTime != -1) {
+            tournament.setMatchBreakTime(newMatchBreakTime);
+        }
+
+        int newCeremonyTime = getIntInput("Enter new ceremony time in minutes (press enter to keep current): ");
+        if (newCeremonyTime != -1) {
+            tournament.setCeremonyTime(newCeremonyTime);
+        }
+
+        try {
+            tournamentController.updateTournament(tournament);
+            System.out.println("Tournament updated successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error updating tournament: " + e.getMessage());
+        }
+    }
+
+    private void removeTeamFromTournament() {
+        String tournamentTitle = getStringInput("Enter tournament title: ");
+        String teamName = getStringInput("Enter team name: ");
+
+        try {
+            tournamentController.removeTeamFromTournament(tournamentTitle, teamName);
+            System.out.println("Team removed from the tournament successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error removing team from tournament: " + e.getMessage());
+        }
+    }
+
+    private void changeTournamentStatus() {
+        String tournamentTitle = getStringInput("Enter tournament title: ");
+        System.out.println("Available statuses: PLANNED, IN_PROGRESS, COMPLETED, CANCELLED");
+        String statusStr = getStringInput("Enter new status: ");
+        try {
+            TournamentStatus newStatus = TournamentStatus.valueOf(statusStr.toUpperCase());
+            tournamentController.changeStatus(tournamentTitle, newStatus);
+            System.out.println("Tournament status changed successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error changing tournament status: " + e.getMessage());
         }
     }
 
@@ -451,6 +690,26 @@ public class ConsoleInterface {
             System.out.println("Estimated duration for tournament '" + title + "': " + duration + " minutes");
         } catch (IllegalArgumentException e) {
             System.out.println("Error calculating estimated duration: " + e.getMessage());
+        }
+    }
+
+    private String getStringInput(String prompt, int minLength, int maxLength) {
+        while (true) {
+            String input = getStringInput(prompt);
+            if (input.length() >= minLength && input.length() <= maxLength) {
+                return input;
+            }
+            System.out.println("Input must be between " + minLength + " and " + maxLength + " characters long.");
+        }
+    }
+
+    private int getIntInput(String prompt, int min, int max) {
+        while (true) {
+            int input = getIntInput(prompt);
+            if (input >= min && input <= max) {
+                return input;
+            }
+            System.out.println("Input must be between " + min + " and " + max + ".");
         }
     }
 }

@@ -70,7 +70,6 @@ public class TournamentRepositoryImpl implements TournamentRepository {
 
     @Override
     public int calculateEstimatedDuration(Long tournamentId) {
-        LOGGER.info("Calculating estimated duration for tournament with id: {}", tournamentId);
         Tournament tournament = findById(tournamentId);
         if (tournament == null || tournament.getGame() == null) {
             return 0;

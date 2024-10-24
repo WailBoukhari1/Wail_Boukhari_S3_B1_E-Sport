@@ -16,7 +16,6 @@ import com.esports.model.TournamentStatus;
 import com.esports.repository.GameRepository;
 import com.esports.repository.TeamRepository;
 import com.esports.repository.TournamentRepository;
-import com.esports.repository.impl.TournamentRepositoryExtension;
 import com.esports.service.TournamentService;
 
 @Transactional
@@ -100,7 +99,7 @@ public class TournamentServiceImpl implements TournamentService {
             LOGGER.warn("Unable to calculate duration for tournament '{}'. Tournament or game might be missing.", tournament != null ? tournament.getTitle() : "null");
             return;
         }
-        int duration = ((TournamentRepositoryExtension) tournamentRepository).calculateEstimatedDuration(tournament.getId());
+        int duration = tournamentRepository.calculateEstimatedDuration(tournament.getId());
         tournament.setEstimatedDuration(duration);
         tournamentRepository.update(tournament);
     }
@@ -227,7 +226,7 @@ public class TournamentServiceImpl implements TournamentService {
         if (tournament == null) {
             throw new IllegalArgumentException("Tournament not found with title: " + title);
         }
-        int duration = ((TournamentRepositoryExtension) tournamentRepository).calculateEstimatedDuration(tournament.getId());
+        int duration = tournamentRepository.calculateEstimatedDuration(tournament.getId());
         if (duration == 0) {
             LOGGER.warn("Unable to calculate duration for tournament '{}'. Game might be missing.", title);
             return 0;

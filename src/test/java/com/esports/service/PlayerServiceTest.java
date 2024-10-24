@@ -13,21 +13,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.esports.model.Player;
-import com.esports.repository.PlayerRepository;
-import com.esports.service.impl.PlayerServiceImpl;
 
 public class PlayerServiceTest {
 
     @Mock
-    private PlayerRepository playerRepository;
-
     private PlayerService playerService;
 
     @Before
     public void setUp() {
-        playerRepository = mock(PlayerRepository.class);
-        playerService = new PlayerServiceImpl();
-        ((PlayerServiceImpl) playerService).setPlayerRepository(playerRepository);
+        playerService = mock(PlayerService.class);
     }
 
     @Test
@@ -35,45 +29,66 @@ public class PlayerServiceTest {
         Long id = 1L;
         Player player = new Player();
         player.setId(id);
-        when(playerRepository.findById(id)).thenReturn(player);
+        when(playerService.findById(id)).thenReturn(player);
 
         Player result = playerService.findById(id);
 
         assertNotNull(result);
         assertEquals(id, result.getId());
-        verify(playerRepository).findById(id);
+        verify(playerService).findById(id);
     }
 
     @Test
     public void testFindAll() {
         List<Player> players = Arrays.asList(new Player(), new Player());
-        when(playerRepository.findAll()).thenReturn(players);
+        when(playerService.findAll()).thenReturn(players);
 
         List<Player> result = playerService.findAll();
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(playerRepository).findAll();
+        verify(playerService).findAll();
     }
 
     @Test
     public void testSave() {
         Player player = new Player();
         playerService.save(player);
-        verify(playerRepository).save(player);
+        verify(playerService).save(player);
     }
 
     @Test
     public void testUpdate() {
         Player player = new Player();
         playerService.update(player);
-        verify(playerRepository).update(player);
+        verify(playerService).update(player);
     }
 
     @Test
     public void testDelete() {
         Long id = 1L;
         playerService.delete(id);
-        verify(playerRepository).delete(id);
+        verify(playerService).delete(id);
+    }
+
+    @Test
+    public void testGetPlayerByUsername() {
+        String username = "testPlayer";
+        Player player = new Player();
+        player.setUsername(username);
+        when(playerService.getPlayerByUsername(username)).thenReturn(player);
+
+        Player result = playerService.getPlayerByUsername(username);
+
+        assertNotNull(result);
+        assertEquals(username, result.getUsername());
+        verify(playerService).getPlayerByUsername(username);
+    }
+
+    @Test
+    public void testDeletePlayerByUsername() {
+        String username = "testPlayer";
+        playerService.deletePlayerByUsername(username);
+        verify(playerService).deletePlayerByUsername(username);
     }
 }

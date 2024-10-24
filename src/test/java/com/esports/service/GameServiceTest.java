@@ -13,21 +13,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.esports.model.Game;
-import com.esports.repository.GameRepository;
-import com.esports.service.impl.GameServiceImpl;
 
 public class GameServiceTest {
 
     @Mock
-    private GameRepository gameRepository;
-
     private GameService gameService;
 
     @Before
     public void setUp() {
-        gameRepository = mock(GameRepository.class);
-        gameService = new GameServiceImpl();
-        ((GameServiceImpl) gameService).setGameRepository(gameRepository);
+        gameService = mock(GameService.class);
     }
 
     @Test
@@ -35,45 +29,45 @@ public class GameServiceTest {
         Long id = 1L;
         Game game = new Game();
         game.setId(id);
-        when(gameRepository.findById(id)).thenReturn(game);
+        when(gameService.findById(id)).thenReturn(game);
 
         Game result = gameService.findById(id);
 
         assertNotNull(result);
         assertEquals(id, result.getId());
-        verify(gameRepository).findById(id);
+        verify(gameService).findById(id);
     }
 
     @Test
     public void testFindAll() {
         List<Game> games = Arrays.asList(new Game(), new Game());
-        when(gameRepository.findAll()).thenReturn(games);
+        when(gameService.findAll()).thenReturn(games);
 
         List<Game> result = gameService.findAll();
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(gameRepository).findAll();
+        verify(gameService).findAll();
     }
 
     @Test
     public void testSave() {
         Game game = new Game();
         gameService.save(game);
-        verify(gameRepository).save(game);
+        verify(gameService).save(game);
     }
 
     @Test
     public void testUpdate() {
         Game game = new Game();
         gameService.update(game);
-        verify(gameRepository).update(game);
+        verify(gameService).update(game);
     }
 
     @Test
     public void testDelete() {
         Long id = 1L;
         gameService.delete(id);
-        verify(gameRepository).delete(id);
+        verify(gameService).delete(id);
     }
 }
