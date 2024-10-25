@@ -1,17 +1,17 @@
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- Set default logging level to ERROR -->
-    <root level="ERROR">
+    <!-- Set default logging level to INFO -->
+    <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
 
-    <!-- Allow INFO logs for com.esports.Main -->
-    <logger name="com.esports.Main" level="INFO" />
+    <!-- Allow INFO logs for com.esports package -->
+    <logger name="com.esports" level="INFO" />
 
     <!-- Suppress the "HHH" prefixed Hibernate logs -->
     <logger name="org.hibernate" level="OFF" />
@@ -19,4 +19,3 @@
     <!-- Suppress Spring logs -->
     <logger name="org.springframework" level="OFF" />
 </configuration>
-
